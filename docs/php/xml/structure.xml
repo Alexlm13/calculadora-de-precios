@@ -1,0 +1,264 @@
+<?xml version="1.0"?>
+<project name="Documentation">
+                <file path="calculadora.php" hash="89e6f20458317697066848135ac19d49">
+            <docblock line="0">
+    <description>Calculadora de precios.</description>
+    <long-description>Permite calcular el precio de un producto con IVA, aplicar un descuento y
+obtener el precio final aplicando ambos. El descuento se aplica siempre sobre
+el precio base y el IVA sobre el precio ya descontado.
+
+Uso desde la línea de comandos:
+
+    php calculadora.php 100 --descuento 10 --iva 21</long-description>
+                    <tag
+                name="package"
+                description="Calculadora"
+                                                                                                />
+            </docblock>
+
+
+            
+            
+
+                            <constant namespace="\" line="24" visibility="public">
+    <name>IVA_GENERAL</name>
+    <full_name>\IVA_GENERAL</full_name>
+    <value>21.0</value>
+        <docblock line="24">
+    <description>Porcentaje de IVA general que se aplica por defecto (21 %).</description>
+    <long-description></long-description>
+                    <tag
+                name="var"
+                description=""
+                                                                                                 type="float"/>
+                            <tag
+                name="package"
+                description="Calculadora"
+                                                                                                />
+                        </docblock>
+
+</constant>
+
+            
+                                        <function namespace="\" line="36" package="\Calculadora" returnByReference="false">
+                    <name>validarNoNegativo</name>
+                    <full_name>\validarNoNegativo()</full_name>
+                    <docblock line="36">
+    <description>Comprueba que un valor numérico no sea negativo ni NAN.</description>
+    <long-description></long-description>
+                    <tag
+                name="package"
+                description="Calculadora"
+                                                                                                />
+                            <tag
+                name="param"
+                description="Valor a comprobar."
+                                                                 variable="valor"                                 type="float"/>
+                <tag
+                name="param"
+                description="Nombre del parámetro, usado en el mensaje de error."
+                                                                 variable="nombre"                                 type="string"/>
+                            <tag
+                name="return"
+                description=""
+                                                                                                 type="void"/>
+                            <tag
+                name="throws"
+                description="Si $valor es negativo o no es un número."
+                                                                                                 type="\InvalidArgumentException"/>
+                        </docblock>
+
+                                            <argument line="36" by_reference="false">
+    <name>valor</name>
+    <default></default>
+    <type>float</type>
+</argument>
+
+                                            <argument line="36" by_reference="false">
+    <name>nombre</name>
+    <default></default>
+    <type>string</type>
+</argument>
+
+                                    </function>
+                            <function namespace="\" line="58" package="\Calculadora" returnByReference="false">
+                    <name>calcularPrecioConIva</name>
+                    <full_name>\calcularPrecioConIva()</full_name>
+                    <docblock line="58">
+    <description>Calcula el precio de un producto incluyendo el IVA.</description>
+    <long-description>Ejemplo:
+
+calcularPrecioConIva(100);      // 121.0
+calcularPrecioConIva(50, 10);   // 55.0</long-description>
+                    <tag
+                name="package"
+                description="Calculadora"
+                                                                                                />
+                            <tag
+                name="param"
+                description="Precio base sin IVA. Debe ser mayor o igual que 0."
+                                                                 variable="precio"                                 type="float"/>
+                <tag
+                name="param"
+                description="Porcentaje de IVA a aplicar. Por defecto 21."
+                                                                 variable="iva"                                 type="float"/>
+                            <tag
+                name="return"
+                description="Precio con IVA, redondeado a dos decimales."
+                                                                                                 type="float"/>
+                            <tag
+                name="throws"
+                description="Si el precio o el IVA son negativos."
+                                                                                                 type="\InvalidArgumentException"/>
+                        </docblock>
+
+                                            <argument line="58" by_reference="false">
+    <name>precio</name>
+    <default></default>
+    <type>float</type>
+</argument>
+
+                                            <argument line="58" by_reference="false">
+    <name>iva</name>
+    <default>\IVA_GENERAL</default>
+    <type>float</type>
+</argument>
+
+                                    </function>
+                            <function namespace="\" line="82" package="\Calculadora" returnByReference="false">
+                    <name>aplicarDescuento</name>
+                    <full_name>\aplicarDescuento()</full_name>
+                    <docblock line="82">
+    <description>Aplica un descuento porcentual a un precio.</description>
+    <long-description>Ejemplo:
+
+aplicarDescuento(200, 25);   // 150.0
+aplicarDescuento(80, 0);     // 80.0</long-description>
+                    <tag
+                name="package"
+                description="Calculadora"
+                                                                                                />
+                            <tag
+                name="param"
+                description="Precio original. Debe ser mayor o igual que 0."
+                                                                 variable="precio"                                 type="float"/>
+                <tag
+                name="param"
+                description="Porcentaje de descuento, entre 0 y 100."
+                                                                 variable="descuento"                                 type="float"/>
+                            <tag
+                name="return"
+                description="Precio tras el descuento, redondeado a dos decimales."
+                                                                                                 type="float"/>
+                            <tag
+                name="throws"
+                description="Si el precio es negativo o el descuento no&#10;está entre 0 y 100."
+                                                                                                 type="\InvalidArgumentException"/>
+                        </docblock>
+
+                                            <argument line="82" by_reference="false">
+    <name>precio</name>
+    <default></default>
+    <type>float</type>
+</argument>
+
+                                            <argument line="82" by_reference="false">
+    <name>descuento</name>
+    <default></default>
+    <type>float</type>
+</argument>
+
+                                    </function>
+                            <function namespace="\" line="108" package="\Calculadora" returnByReference="false">
+                    <name>calcularPrecioFinal</name>
+                    <full_name>\calcularPrecioFinal()</full_name>
+                    <docblock line="108">
+    <description>Calcula el precio final aplicando primero el descuento y luego el IVA.</description>
+    <long-description>Ejemplo:
+
+calcularPrecioFinal(100, 10, 21);   // 108.9
+calcularPrecioFinal(100);           // 121.0</long-description>
+                    <tag
+                name="package"
+                description="Calculadora"
+                                                                                                />
+                            <tag
+                name="param"
+                description="Precio base sin IVA. Debe ser mayor o igual que 0."
+                                                                 variable="precio"                                 type="float"/>
+                <tag
+                name="param"
+                description="Porcentaje de descuento, entre 0 y 100. Por defecto 0."
+                                                                 variable="descuento"                                 type="float"/>
+                <tag
+                name="param"
+                description="Porcentaje de IVA a aplicar. Por defecto 21."
+                                                                 variable="iva"                                 type="float"/>
+                            <tag
+                name="return"
+                description="Precio final, redondeado a dos decimales."
+                                                                                                 type="float"/>
+                            <tag
+                name="throws"
+                description="Si algún parámetro está fuera de su rango válido."
+                                                                                                 type="\InvalidArgumentException"/>
+                        </docblock>
+
+                                            <argument line="108" by_reference="false">
+    <name>precio</name>
+    <default></default>
+    <type>float</type>
+</argument>
+
+                                            <argument line="108" by_reference="false">
+    <name>descuento</name>
+    <default>0.0</default>
+    <type>float</type>
+</argument>
+
+                                            <argument line="108" by_reference="false">
+    <name>iva</name>
+    <default>\IVA_GENERAL</default>
+    <type>float</type>
+</argument>
+
+                                    </function>
+                            <function namespace="\" line="126" package="\Calculadora" returnByReference="false">
+                    <name>main</name>
+                    <full_name>\main()</full_name>
+                    <docblock line="126">
+    <description>Ejecuta la calculadora desde la línea de comandos.</description>
+    <long-description></long-description>
+                    <tag
+                name="package"
+                description="Calculadora"
+                                                                                                />
+                            <tag
+                name="param"
+                description="Argumentos recibidos: el precio y, de forma&#10;opcional, `--descuento &lt;n&gt;` y `--iva &lt;n&gt;`."
+                                                                 variable="argumentos"                                 type="string[]"/>
+                            <tag
+                name="return"
+                description="0 si todo ha ido bien y 1 si algún dato no es válido."
+                                                                                                 type="int"/>
+                        </docblock>
+
+                                            <argument line="126" by_reference="false">
+    <name>argumentos</name>
+    <default></default>
+    <type>string[]</type>
+</argument>
+
+                                    </function>
+            
+                        
+                        
+                        
+                        
+            
+            <parse_markers></parse_markers>
+        </file>
+    
+            <namespace name="\" full_name="\" />
+
+    </project>
