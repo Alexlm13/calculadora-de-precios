@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="es" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>calculadora &#8212; documentación de Calculadora de precios - 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=4936afed"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=f85f4cfb"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Código fuente para calculadora</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Calculadora de precios.</span>
+
+<span class="sd">Este módulo permite calcular el precio de un producto con IVA, aplicar un</span>
+<span class="sd">descuento y obtener el precio final aplicando ambos. El descuento se aplica</span>
+<span class="sd">siempre sobre el precio base y el IVA sobre el precio ya descontado.</span>
+
+<span class="sd">Uso desde la línea de comandos::</span>
+
+<span class="sd">    python calculadora.py 100 --descuento 10 --iva 21</span>
+
+<span class="sd">Funciones principales:</span>
+
+<span class="sd">* :func:`calcular_precio_con_iva`</span>
+<span class="sd">* :func:`aplicar_descuento`</span>
+<span class="sd">* :func:`calcular_precio_final`</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">IVA_GENERAL</span> <span class="o">=</span> <span class="mf">21.0</span>
+<span class="sd">"""Porcentaje de IVA general que se aplica por defecto (21 %)."""</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validar_no_negativo</span><span class="p">(</span><span class="n">valor</span><span class="p">,</span> <span class="n">nombre</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Comprueba que un valor numérico no sea negativo.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        valor (float): Valor a comprobar.</span>
+<span class="sd">        nombre (str): Nombre del parámetro, usado en el mensaje de error.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: Si ``valor`` es menor que 0.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">valor</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nombre</span><span class="si">}</span><span class="s2"> no puede ser negativo: </span><span class="si">{</span><span class="n">valor</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="calcular_precio_con_iva">
+<a class="viewcode-back" href="../calculadora.html#calculadora.calcular_precio_con_iva">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calcular_precio_con_iva</span><span class="p">(</span><span class="n">precio</span><span class="p">,</span> <span class="n">iva</span><span class="o">=</span><span class="n">IVA_GENERAL</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Calcula el precio de un producto incluyendo el IVA.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        precio (float): Precio base sin IVA. Debe ser mayor o igual que 0.</span>
+<span class="sd">        iva (float): Porcentaje de IVA a aplicar. Por defecto 21.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Precio con IVA, redondeado a dos decimales.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: Si el precio o el IVA son negativos.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; calcular_precio_con_iva(100)</span>
+<span class="sd">        121.0</span>
+<span class="sd">        &gt;&gt;&gt; calcular_precio_con_iva(50, iva=10)</span>
+<span class="sd">        55.0</span>
+<span class="sd">    """</span>
+    <span class="n">_validar_no_negativo</span><span class="p">(</span><span class="n">precio</span><span class="p">,</span> <span class="s2">"El precio"</span><span class="p">)</span>
+    <span class="n">_validar_no_negativo</span><span class="p">(</span><span class="n">iva</span><span class="p">,</span> <span class="s2">"El IVA"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">precio</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">iva</span> <span class="o">/</span> <span class="mi">100</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="aplicar_descuento">
+<a class="viewcode-back" href="../calculadora.html#calculadora.aplicar_descuento">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">aplicar_descuento</span><span class="p">(</span><span class="n">precio</span><span class="p">,</span> <span class="n">descuento</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Aplica un descuento porcentual a un precio.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        precio (float): Precio original. Debe ser mayor o igual que 0.</span>
+<span class="sd">        descuento (float): Porcentaje de descuento, entre 0 y 100.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Precio tras el descuento, redondeado a dos decimales.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: Si el precio es negativo o el descuento no está entre</span>
+<span class="sd">            0 y 100.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; aplicar_descuento(200, 25)</span>
+<span class="sd">        150.0</span>
+<span class="sd">        &gt;&gt;&gt; aplicar_descuento(80, 0)</span>
+<span class="sd">        80.0</span>
+<span class="sd">    """</span>
+    <span class="n">_validar_no_negativo</span><span class="p">(</span><span class="n">precio</span><span class="p">,</span> <span class="s2">"El precio"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">descuento</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"El descuento debe estar entre 0 y 100: </span><span class="si">{</span><span class="n">descuento</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">precio</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">descuento</span> <span class="o">/</span> <span class="mi">100</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="calcular_precio_final">
+<a class="viewcode-back" href="../calculadora.html#calculadora.calcular_precio_final">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calcular_precio_final</span><span class="p">(</span><span class="n">precio</span><span class="p">,</span> <span class="n">descuento</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">iva</span><span class="o">=</span><span class="n">IVA_GENERAL</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Calcula el precio final aplicando primero el descuento y luego el IVA.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        precio (float): Precio base sin IVA. Debe ser mayor o igual que 0.</span>
+<span class="sd">        descuento (float): Porcentaje de descuento, entre 0 y 100. Por</span>
+<span class="sd">            defecto 0 (sin descuento).</span>
+<span class="sd">        iva (float): Porcentaje de IVA a aplicar. Por defecto 21.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Precio final, redondeado a dos decimales.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: Si algún parámetro está fuera de su rango válido.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; calcular_precio_final(100, descuento=10, iva=21)</span>
+<span class="sd">        108.9</span>
+<span class="sd">        &gt;&gt;&gt; calcular_precio_final(100)</span>
+<span class="sd">        121.0</span>
+<span class="sd">    """</span>
+    <span class="n">precio_descontado</span> <span class="o">=</span> <span class="n">aplicar_descuento</span><span class="p">(</span><span class="n">precio</span><span class="p">,</span> <span class="n">descuento</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">calcular_precio_con_iva</span><span class="p">(</span><span class="n">precio_descontado</span><span class="p">,</span> <span class="n">iva</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../calculadora.html#calculadora.main">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">argumentos</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Ejecuta la calculadora desde la línea de comandos.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        argumentos (list[str] | None): Lista de argumentos. Si es ``None``</span>
+<span class="sd">            se leen de ``sys.argv``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: ``0`` si todo ha ido bien y ``1`` si algún dato no es válido.</span>
+<span class="sd">    """</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"Calculadora de precios con descuento e IVA."</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"precio"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Precio base sin IVA"</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">"--descuento"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">"Porcentaje de descuento, entre 0 y 100 (por defecto 0)"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">"--iva"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">IVA_GENERAL</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">"Porcentaje de IVA (por defecto 21)"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">argumentos</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">con_descuento</span> <span class="o">=</span> <span class="n">aplicar_descuento</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">precio</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">descuento</span><span class="p">)</span>
+        <span class="n">final</span> <span class="o">=</span> <span class="n">calcular_precio_final</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">precio</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">descuento</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">iva</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Precio base:   </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">precio</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> €"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Con descuento: </span><span class="si">{</span><span class="n">con_descuento</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> € (-</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">descuento</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2"> %)"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Precio final:  </span><span class="si">{</span><span class="n">final</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> € (IVA </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">iva</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2"> %)"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Calculadora de precios</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Ir a" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navegación</h3>
+<p class="caption" role="heading"><span class="caption-text">Contenido</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calculadora.html">Módulo calculadora</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Código de módulo</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

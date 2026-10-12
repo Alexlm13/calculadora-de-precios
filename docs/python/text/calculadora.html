@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html lang="es" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Módulo calculadora &#8212; documentación de Calculadora de precios - 1.0</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=4936afed"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/translations.js?v=f85f4cfb"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="prev" title="Calculadora de precios" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-calculadora">
+<span id="modulo-calculadora"></span><h1>Módulo calculadora<a class="headerlink" href="#module-calculadora" title="Link to this heading">¶</a></h1>
+<p>Calculadora de precios.</p>
+<p>Este módulo permite calcular el precio de un producto con IVA, aplicar un
+descuento y obtener el precio final aplicando ambos. El descuento se aplica
+siempre sobre el precio base y el IVA sobre el precio ya descontado.</p>
+<p>Uso desde la línea de comandos:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">calculadora</span><span class="o">.</span><span class="n">py</span> <span class="mi">100</span> <span class="o">--</span><span class="n">descuento</span> <span class="mi">10</span> <span class="o">--</span><span class="n">iva</span> <span class="mi">21</span>
+</pre></div>
+</div>
+<p>Funciones principales:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#calculadora.calcular_precio_con_iva" title="calculadora.calcular_precio_con_iva"><code class="xref py py-func docutils literal notranslate"><span class="pre">calcular_precio_con_iva()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#calculadora.aplicar_descuento" title="calculadora.aplicar_descuento"><code class="xref py py-func docutils literal notranslate"><span class="pre">aplicar_descuento()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#calculadora.calcular_precio_final" title="calculadora.calcular_precio_final"><code class="xref py py-func docutils literal notranslate"><span class="pre">calcular_precio_final()</span></code></a></p></li>
+</ul>
+<dl class="py data">
+<dt class="sig sig-object py" id="calculadora.IVA_GENERAL">
+<span class="sig-prename descclassname"><span class="pre">calculadora.</span></span><span class="sig-name descname"><span class="pre">IVA_GENERAL</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">21.0</span></span><a class="headerlink" href="#calculadora.IVA_GENERAL" title="Link to this definition">¶</a></dt>
+<dd><p>Porcentaje de IVA general que se aplica por defecto (21 %).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="calculadora.aplicar_descuento">
+<span class="sig-prename descclassname"><span class="pre">calculadora.</span></span><span class="sig-name descname"><span class="pre">aplicar_descuento</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">precio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descuento</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calculadora.html#aplicar_descuento"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#calculadora.aplicar_descuento" title="Link to this definition">¶</a></dt>
+<dd><p>Aplica un descuento porcentual a un precio.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>precio</strong> (<em>float</em>) – Precio original. Debe ser mayor o igual que 0.</p></li>
+<li><p><strong>descuento</strong> (<em>float</em>) – Porcentaje de descuento, entre 0 y 100.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>Precio tras el descuento, redondeado a dos decimales.</p>
+</dd>
+<dt class="field-odd">Tipo del valor devuelto<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Muestra<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Si el precio es negativo o el descuento no está entre
+    0 y 100.</p>
+</dd>
+</dl>
+<p class="rubric">Ejemplo</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">aplicar_descuento</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+<span class="go">150.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aplicar_descuento</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">80.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="calculadora.calcular_precio_con_iva">
+<span class="sig-prename descclassname"><span class="pre">calculadora.</span></span><span class="sig-name descname"><span class="pre">calcular_precio_con_iva</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">precio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iva</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">21.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calculadora.html#calcular_precio_con_iva"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#calculadora.calcular_precio_con_iva" title="Link to this definition">¶</a></dt>
+<dd><p>Calcula el precio de un producto incluyendo el IVA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>precio</strong> (<em>float</em>) – Precio base sin IVA. Debe ser mayor o igual que 0.</p></li>
+<li><p><strong>iva</strong> (<em>float</em>) – Porcentaje de IVA a aplicar. Por defecto 21.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>Precio con IVA, redondeado a dos decimales.</p>
+</dd>
+<dt class="field-odd">Tipo del valor devuelto<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Muestra<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Si el precio o el IVA son negativos.</p>
+</dd>
+</dl>
+<p class="rubric">Ejemplo</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calcular_precio_con_iva</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="go">121.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calcular_precio_con_iva</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">iva</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">55.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="calculadora.calcular_precio_final">
+<span class="sig-prename descclassname"><span class="pre">calculadora.</span></span><span class="sig-name descname"><span class="pre">calcular_precio_final</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">precio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descuento</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iva</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">21.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calculadora.html#calcular_precio_final"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#calculadora.calcular_precio_final" title="Link to this definition">¶</a></dt>
+<dd><p>Calcula el precio final aplicando primero el descuento y luego el IVA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>precio</strong> (<em>float</em>) – Precio base sin IVA. Debe ser mayor o igual que 0.</p></li>
+<li><p><strong>descuento</strong> (<em>float</em>) – Porcentaje de descuento, entre 0 y 100. Por
+defecto 0 (sin descuento).</p></li>
+<li><p><strong>iva</strong> (<em>float</em>) – Porcentaje de IVA a aplicar. Por defecto 21.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>Precio final, redondeado a dos decimales.</p>
+</dd>
+<dt class="field-odd">Tipo del valor devuelto<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Muestra<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Si algún parámetro está fuera de su rango válido.</p>
+</dd>
+</dl>
+<p class="rubric">Ejemplo</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calcular_precio_final</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">descuento</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">iva</span><span class="o">=</span><span class="mi">21</span><span class="p">)</span>
+<span class="go">108.9</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calcular_precio_final</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="go">121.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="calculadora.main">
+<span class="sig-prename descclassname"><span class="pre">calculadora.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argumentos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calculadora.html#main"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#calculadora.main" title="Link to this definition">¶</a></dt>
+<dd><p>Ejecuta la calculadora desde la línea de comandos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>argumentos</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – Lista de argumentos. Si es <code class="docutils literal notranslate"><span class="pre">None</span></code>
+se leen de <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code>.</p>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">0</span></code> si todo ha ido bien y <code class="docutils literal notranslate"><span class="pre">1</span></code> si algún dato no es válido.</p>
+</dd>
+<dt class="field-odd">Tipo del valor devuelto<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Calculadora de precios</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Ir a" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navegación</h3>
+<p class="caption" role="heading"><span class="caption-text">Contenido</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Módulo calculadora</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#calculadora.IVA_GENERAL"><code class="docutils literal notranslate"><span class="pre">IVA_GENERAL</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculadora.aplicar_descuento"><code class="docutils literal notranslate"><span class="pre">aplicar_descuento()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculadora.calcular_precio_con_iva"><code class="docutils literal notranslate"><span class="pre">calcular_precio_con_iva()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculadora.calcular_precio_final"><code class="docutils literal notranslate"><span class="pre">calcular_precio_final()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculadora.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="capítulo anterior">Calculadora de precios</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/calculadora.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
