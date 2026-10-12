@@ -1,0 +1,149 @@
+/**
+ * Calculadora de precios.
+ *
+ * Permite calcular el precio de un producto con IVA, aplicar un descuento y
+ * obtener el precio final aplicando ambos. El descuento se aplica siempre sobre
+ * el precio base y el IVA sobre el precio ya descontado.
+ *
+ * Uso desde la línea de comandos:
+ *
+ *     node calculadora.js 100 --descuento 10 --iva 21
+ *
+ * @module calculadora
+ */
+
+'use strict';
+
+/**
+ * Porcentaje de IVA general que se aplica por defecto (21 %).
+ * @constant {number}
+ */
+const IVA_GENERAL = 21;
+
+/**
+ * Redondea un número a dos decimales.
+ *
+ * @private
+ * @param {number} valor - Número a redondear.
+ * @returns {number} El número redondeado a dos decimales.
+ */
+function redondear(valor) {
+  return Math.round(valor * 100) / 100;
+}
+
+/**
+ * Comprueba que un valor numérico no sea negativo ni `NaN`.
+ *
+ * @private
+ * @param {number} valor - Valor a comprobar.
+ * @param {string} nombre - Nombre del parámetro, usado en el mensaje de error.
+ * @throws {RangeError} Si `valor` es negativo o no es un número.
+ */
+function validarNoNegativo(valor, nombre) {
+  if (!(valor >= 0)) {
+    throw new RangeError(`${nombre} no puede ser negativo: ${valor}`);
+  }
+}
+
+/**
+ * Calcula el precio de un producto incluyendo el IVA.
+ *
+ * @param {number} precio - Precio base sin IVA. Debe ser mayor o igual que 0.
+ * @param {number} [iva=21] - Porcentaje de IVA a aplicar.
+ * @returns {number} Precio con IVA, redondeado a dos decimales.
+ * @throws {RangeError} Si el precio o el IVA son negativos.
+ * @example
+ * calcularPrecioConIva(100);     // 121
+ * calcularPrecioConIva(50, 10);  // 55
+ */
+function calcularPrecioConIva(precio, iva = IVA_GENERAL) {
+  validarNoNegativo(precio, 'El precio');
+  validarNoNegativo(iva, 'El IVA');
+  return redondear(precio * (1 + iva / 100));
+}
+
+/**
+ * Aplica un descuento porcentual a un precio.
+ *
+ * @param {number} precio - Precio original. Debe ser mayor o igual que 0.
+ * @param {number} descuento - Porcentaje de descuento, entre 0 y 100.
+ * @returns {number} Precio tras el descuento, redondeado a dos decimales.
+ * @throws {RangeError} Si el precio es negativo o el descuento no está entre
+ *   0 y 100.
+ * @example
+ * aplicarDescuento(200, 25);  // 150
+ * aplicarDescuento(80, 0);    // 80
+ */
+function aplicarDescuento(precio, descuento) {
+  validarNoNegativo(precio, 'El precio');
+  if (!(descuento >= 0 && descuento <= 100)) {
+    throw new RangeError(`El descuento debe estar entre 0 y 100: ${descuento}`);
+  }
+  return redondear(precio * (1 - descuento / 100));
+}
+
+/**
+ * Calcula el precio final aplicando primero el descuento y luego el IVA.
+ *
+ * @param {number} precio - Precio base sin IVA. Debe ser mayor o igual que 0.
+ * @param {number} [descuento=0] - Porcentaje de descuento, entre 0 y 100.
+ * @param {number} [iva=21] - Porcentaje de IVA a aplicar.
+ * @returns {number} Precio final, redondeado a dos decimales.
+ * @throws {RangeError} Si algún parámetro está fuera de su rango válido.
+ * @example
+ * calcularPrecioFinal(100, 10, 21);  // 108.9
+ * calcularPrecioFinal(100);          // 121
+ */
+function calcularPrecioFinal(precio, descuento = 0, iva = IVA_GENERAL) {
+  const precioDescontado = aplicarDescuento(precio, descuento);
+  return calcularPrecioConIva(precioDescontado, iva);
+}
+
+/**
+ * Ejecuta la calculadora desde la línea de comandos.
+ *
+ * @param {string[]} argumentos - Argumentos recibidos: el precio y, de forma
+ *   opcional, `--descuento <n>` y `--iva <n>`.
+ * @returns {number} `0` si todo ha ido bien y `1` si algún dato no es válido.
+ */
+function main(argumentos) {
+  const precio = parseFloat(argumentos[0]);
+  let descuento = 0;
+  let iva = IVA_GENERAL;
+
+  for (let i = 1; i < argumentos.length; i += 2) {
+    if (argumentos[i] === '--descuento') {
+      descuento = parseFloat(argumentos[i + 1]);
+    } else if (argumentos[i] === '--iva') {
+      iva = parseFloat(argumentos[i + 1]);
+    }
+  }
+
+  if (Number.isNaN(precio)) {
+    console.log('Uso: node calculadora.js <precio> [--descuento <n>] [--iva <n>]');
+    return 1;
+  }
+
+  try {
+    const conDescuento = aplicarDescuento(precio, descuento);
+    const final = calcularPrecioFinal(precio, descuento, iva);
+    console.log(`Precio base:   ${precio.toFixed(2)} €`);
+    console.log(`Con descuento: ${conDescuento.toFixed(2)} € (-${descuento} %)`);
+    console.log(`Precio final:  ${final.toFixed(2)} € (IVA ${iva} %)`);
+    return 0;
+  } catch (error) {
+    console.log(`Error: ${error.message}`);
+    return 1;
+  }
+}
+
+module.exports = {
+  IVA_GENERAL,
+  calcularPrecioConIva,
+  aplicarDescuento,
+  calcularPrecioFinal,
+};
+
+if (require.main === module) {
+  process.exit(main(process.argv.slice(2)));
+}
