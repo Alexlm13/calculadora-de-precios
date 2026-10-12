@@ -1,0 +1,837 @@
+[
+    {
+        "comment": "/**\n * Calculadora de precios.\n *\n * Permite calcular el precio de un producto con IVA, aplicar un descuento y\n * obtener el precio final aplicando ambos. El descuento se aplica siempre sobre\n * el precio base y el IVA sobre el precio ya descontado.\n *\n * Uso desde la línea de comandos:\n *\n *     node calculadora.js 100 --descuento 10 --iva 21\n *\n * @module calculadora\n */",
+        "meta": {
+            "filename": "calculadora.js",
+            "lineno": 1,
+            "columnno": 0,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {}
+        },
+        "description": "Calculadora de precios.\n\nPermite calcular el precio de un producto con IVA, aplicar un descuento y\nobtener el precio final aplicando ambos. El descuento se aplica siempre sobre\nel precio base y el IVA sobre el precio ya descontado.\n\nUso desde la línea de comandos:\n\n    node calculadora.js 100 --descuento 10 --iva 21",
+        "kind": "module",
+        "name": "calculadora",
+        "longname": "module:calculadora"
+    },
+    {
+        "comment": "/**\n * Porcentaje de IVA general que se aplica por defecto (21 %).\n * @constant {number}\n */",
+        "meta": {
+            "range": [
+                491,
+                507
+            ],
+            "filename": "calculadora.js",
+            "lineno": 21,
+            "columnno": 6,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000005",
+                "name": "IVA_GENERAL",
+                "type": "Literal",
+                "value": 21
+            }
+        },
+        "description": "Porcentaje de IVA general que se aplica por defecto (21 %).",
+        "kind": "constant",
+        "type": {
+            "names": [
+                "number"
+            ]
+        },
+        "name": "IVA_GENERAL",
+        "longname": "module:calculadora~IVA_GENERAL",
+        "scope": "inner",
+        "memberof": "module:calculadora",
+        "params": []
+    },
+    {
+        "comment": "/**\n * Redondea un número a dos decimales.\n *\n * @private\n * @param {number} valor - Número a redondear.\n * @returns {number} El número redondeado a dos decimales.\n */",
+        "meta": {
+            "range": [
+                678,
+                747
+            ],
+            "filename": "calculadora.js",
+            "lineno": 30,
+            "columnno": 0,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000008",
+                "name": "redondear",
+                "type": "FunctionDeclaration",
+                "paramnames": [
+                    "valor"
+                ]
+            }
+        },
+        "description": "Redondea un número a dos decimales.",
+        "access": "private",
+        "params": [
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "description": "Número a redondear.",
+                "name": "valor"
+            }
+        ],
+        "returns": [
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "description": "El número redondeado a dos decimales."
+            }
+        ],
+        "name": "redondear",
+        "longname": "module:calculadora~redondear",
+        "kind": "function",
+        "scope": "inner",
+        "memberof": "module:calculadora"
+    },
+    {
+        "comment": "/**\n * Comprueba que un valor numérico no sea negativo ni `NaN`.\n *\n * @private\n * @param {number} valor - Valor a comprobar.\n * @param {string} nombre - Nombre del parámetro, usado en el mensaje de error.\n * @throws {RangeError} Si `valor` es negativo o no es un número.\n */",
+        "meta": {
+            "range": [
+                1025,
+                1168
+            ],
+            "filename": "calculadora.js",
+            "lineno": 42,
+            "columnno": 0,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000022",
+                "name": "validarNoNegativo",
+                "type": "FunctionDeclaration",
+                "paramnames": [
+                    "valor",
+                    "nombre"
+                ]
+            }
+        },
+        "description": "Comprueba que un valor numérico no sea negativo ni `NaN`.",
+        "access": "private",
+        "params": [
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "description": "Valor a comprobar.",
+                "name": "valor"
+            },
+            {
+                "type": {
+                    "names": [
+                        "string"
+                    ]
+                },
+                "description": "Nombre del parámetro, usado en el mensaje de error.",
+                "name": "nombre"
+            }
+        ],
+        "exceptions": [
+            {
+                "type": {
+                    "names": [
+                        "RangeError"
+                    ]
+                },
+                "description": "Si `valor` es negativo o no es un número."
+            }
+        ],
+        "name": "validarNoNegativo",
+        "longname": "module:calculadora~validarNoNegativo",
+        "kind": "function",
+        "scope": "inner",
+        "memberof": "module:calculadora"
+    },
+    {
+        "comment": "/**\n * Calcula el precio de un producto incluyendo el IVA.\n *\n * @param {number} precio - Precio base sin IVA. Debe ser mayor o igual que 0.\n * @param {number} [iva=21] - Porcentaje de IVA a aplicar.\n * @returns {number} Precio con IVA, redondeado a dos decimales.\n * @throws {RangeError} Si el precio o el IVA son negativos.\n * @example\n * calcularPrecioConIva(100);     // 121\n * calcularPrecioConIva(50, 10);  // 55\n */",
+        "meta": {
+            "range": [
+                1593,
+                1777
+            ],
+            "filename": "calculadora.js",
+            "lineno": 59,
+            "columnno": 0,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000042",
+                "name": "calcularPrecioConIva",
+                "type": "FunctionDeclaration",
+                "paramnames": [
+                    "precio",
+                    "iva"
+                ]
+            }
+        },
+        "description": "Calcula el precio de un producto incluyendo el IVA.",
+        "params": [
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "description": "Precio base sin IVA. Debe ser mayor o igual que 0.",
+                "name": "precio"
+            },
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "optional": true,
+                "defaultvalue": 21,
+                "description": "Porcentaje de IVA a aplicar.",
+                "name": "iva"
+            }
+        ],
+        "returns": [
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "description": "Precio con IVA, redondeado a dos decimales."
+            }
+        ],
+        "exceptions": [
+            {
+                "type": {
+                    "names": [
+                        "RangeError"
+                    ]
+                },
+                "description": "Si el precio o el IVA son negativos."
+            }
+        ],
+        "examples": [
+            "calcularPrecioConIva(100);     // 121\ncalcularPrecioConIva(50, 10);  // 55"
+        ],
+        "name": "calcularPrecioConIva",
+        "longname": "module:calculadora~calcularPrecioConIva",
+        "kind": "function",
+        "scope": "inner",
+        "memberof": "module:calculadora"
+    },
+    {
+        "comment": "/**\n * Aplica un descuento porcentual a un precio.\n *\n * @param {number} precio - Precio original. Debe ser mayor o igual que 0.\n * @param {number} descuento - Porcentaje de descuento, entre 0 y 100.\n * @returns {number} Precio tras el descuento, redondeado a dos decimales.\n * @throws {RangeError} Si el precio es negativo o el descuento no está entre\n *   0 y 100.\n * @example\n * aplicarDescuento(200, 25);  // 150\n * aplicarDescuento(80, 0);    // 80\n */",
+        "meta": {
+            "range": [
+                2237,
+                2511
+            ],
+            "filename": "calculadora.js",
+            "lineno": 77,
+            "columnno": 0,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000069",
+                "name": "aplicarDescuento",
+                "type": "FunctionDeclaration",
+                "paramnames": [
+                    "precio",
+                    "descuento"
+                ]
+            }
+        },
+        "description": "Aplica un descuento porcentual a un precio.",
+        "params": [
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "description": "Precio original. Debe ser mayor o igual que 0.",
+                "name": "precio"
+            },
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "description": "Porcentaje de descuento, entre 0 y 100.",
+                "name": "descuento"
+            }
+        ],
+        "returns": [
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "description": "Precio tras el descuento, redondeado a dos decimales."
+            }
+        ],
+        "exceptions": [
+            {
+                "type": {
+                    "names": [
+                        "RangeError"
+                    ]
+                },
+                "description": "Si el precio es negativo o el descuento no está entre\n  0 y 100."
+            }
+        ],
+        "examples": [
+            "aplicarDescuento(200, 25);  // 150\naplicarDescuento(80, 0);    // 80"
+        ],
+        "name": "aplicarDescuento",
+        "longname": "module:calculadora~aplicarDescuento",
+        "kind": "function",
+        "scope": "inner",
+        "memberof": "module:calculadora"
+    },
+    {
+        "comment": "/**\n * Calcula el precio final aplicando primero el descuento y luego el IVA.\n *\n * @param {number} precio - Precio base sin IVA. Debe ser mayor o igual que 0.\n * @param {number} [descuento=0] - Porcentaje de descuento, entre 0 y 100.\n * @param {number} [iva=21] - Porcentaje de IVA a aplicar.\n * @returns {number} Precio final, redondeado a dos decimales.\n * @throws {RangeError} Si algún parámetro está fuera de su rango válido.\n * @example\n * calcularPrecioFinal(100, 10, 21);  // 108.9\n * calcularPrecioFinal(100);          // 121\n */",
+        "meta": {
+            "range": [
+                3052,
+                3244
+            ],
+            "filename": "calculadora.js",
+            "lineno": 97,
+            "columnno": 0,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000106",
+                "name": "calcularPrecioFinal",
+                "type": "FunctionDeclaration",
+                "paramnames": [
+                    "precio",
+                    "descuento",
+                    "iva"
+                ]
+            },
+            "vars": {
+                "precioDescontado": "module:calculadora~calcularPrecioFinal~precioDescontado"
+            }
+        },
+        "description": "Calcula el precio final aplicando primero el descuento y luego el IVA.",
+        "params": [
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "description": "Precio base sin IVA. Debe ser mayor o igual que 0.",
+                "name": "precio"
+            },
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "optional": true,
+                "defaultvalue": 0,
+                "description": "Porcentaje de descuento, entre 0 y 100.",
+                "name": "descuento"
+            },
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "optional": true,
+                "defaultvalue": 21,
+                "description": "Porcentaje de IVA a aplicar.",
+                "name": "iva"
+            }
+        ],
+        "returns": [
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "description": "Precio final, redondeado a dos decimales."
+            }
+        ],
+        "exceptions": [
+            {
+                "type": {
+                    "names": [
+                        "RangeError"
+                    ]
+                },
+                "description": "Si algún parámetro está fuera de su rango válido."
+            }
+        ],
+        "examples": [
+            "calcularPrecioFinal(100, 10, 21);  // 108.9\ncalcularPrecioFinal(100);          // 121"
+        ],
+        "name": "calcularPrecioFinal",
+        "longname": "module:calculadora~calcularPrecioFinal",
+        "kind": "function",
+        "scope": "inner",
+        "memberof": "module:calculadora"
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                3133,
+                3187
+            ],
+            "filename": "calculadora.js",
+            "lineno": 98,
+            "columnno": 8,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000117",
+                "name": "precioDescontado",
+                "type": "CallExpression",
+                "value": ""
+            }
+        },
+        "undocumented": true,
+        "name": "precioDescontado",
+        "longname": "module:calculadora~calcularPrecioFinal~precioDescontado",
+        "kind": "constant",
+        "memberof": "module:calculadora~calcularPrecioFinal",
+        "scope": "inner",
+        "params": []
+    },
+    {
+        "comment": "/**\n * Ejecuta la calculadora desde la línea de comandos.\n *\n * @param {string[]} argumentos - Argumentos recibidos: el precio y, de forma\n *   opcional, `--descuento <n>` y `--iva <n>`.\n * @returns {number} `0` si todo ha ido bien y `1` si algún dato no es válido.\n */",
+        "meta": {
+            "range": [
+                3516,
+                4451
+            ],
+            "filename": "calculadora.js",
+            "lineno": 109,
+            "columnno": 0,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000128",
+                "name": "main",
+                "type": "FunctionDeclaration",
+                "paramnames": [
+                    "argumentos"
+                ]
+            },
+            "vars": {
+                "precio": "module:calculadora~main~precio",
+                "descuento": "module:calculadora~descuento",
+                "iva": "module:calculadora~iva",
+                "i": "module:calculadora~i",
+                "conDescuento": "module:calculadora~main~conDescuento",
+                "final": "module:calculadora~main~final"
+            }
+        },
+        "description": "Ejecuta la calculadora desde la línea de comandos.",
+        "params": [
+            {
+                "type": {
+                    "names": [
+                        "Array.<string>"
+                    ]
+                },
+                "description": "Argumentos recibidos: el precio y, de forma\n  opcional, `--descuento <n>` y `--iva <n>`.",
+                "name": "argumentos"
+            }
+        ],
+        "returns": [
+            {
+                "type": {
+                    "names": [
+                        "number"
+                    ]
+                },
+                "description": "`0` si todo ha ido bien y `1` si algún dato no es válido."
+            }
+        ],
+        "name": "main",
+        "longname": "module:calculadora~main",
+        "kind": "function",
+        "scope": "inner",
+        "memberof": "module:calculadora"
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                3552,
+                3586
+            ],
+            "filename": "calculadora.js",
+            "lineno": 110,
+            "columnno": 8,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000133",
+                "name": "precio",
+                "type": "CallExpression",
+                "value": ""
+            }
+        },
+        "undocumented": true,
+        "name": "precio",
+        "longname": "module:calculadora~main~precio",
+        "kind": "constant",
+        "memberof": "module:calculadora~main",
+        "scope": "inner",
+        "params": []
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                3594,
+                3607
+            ],
+            "filename": "calculadora.js",
+            "lineno": 111,
+            "columnno": 6,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000141",
+                "name": "descuento",
+                "type": "Literal",
+                "value": 0
+            }
+        },
+        "undocumented": true,
+        "name": "descuento",
+        "longname": "module:calculadora~main~descuento",
+        "kind": "member",
+        "memberof": "module:calculadora~main",
+        "scope": "inner",
+        "params": []
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                3615,
+                3632
+            ],
+            "filename": "calculadora.js",
+            "lineno": 112,
+            "columnno": 6,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000145",
+                "name": "iva",
+                "type": "Identifier",
+                "value": "IVA_GENERAL"
+            }
+        },
+        "undocumented": true,
+        "name": "iva",
+        "longname": "module:calculadora~main~iva",
+        "kind": "member",
+        "memberof": "module:calculadora~main",
+        "scope": "inner",
+        "params": []
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                3646,
+                3651
+            ],
+            "filename": "calculadora.js",
+            "lineno": 114,
+            "columnno": 11,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000150",
+                "name": "i",
+                "type": "Literal",
+                "value": 1
+            }
+        },
+        "undocumented": true,
+        "name": "i",
+        "longname": "module:calculadora~main~i",
+        "kind": "member",
+        "memberof": "module:calculadora~main",
+        "scope": "inner",
+        "params": []
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                3676,
+                3682
+            ],
+            "filename": "calculadora.js",
+            "lineno": 114,
+            "columnno": 41,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000158",
+                "name": "i",
+                "type": "Literal",
+                "funcscope": "module:calculadora~main",
+                "value": 2,
+                "paramnames": []
+            }
+        },
+        "undocumented": true,
+        "name": "i",
+        "longname": "module:calculadora~i",
+        "kind": "member",
+        "scope": "inner",
+        "memberof": "module:calculadora"
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                3735,
+                3776
+            ],
+            "filename": "calculadora.js",
+            "lineno": 116,
+            "columnno": 6,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000170",
+                "name": "descuento",
+                "type": "CallExpression",
+                "funcscope": "module:calculadora~main",
+                "value": "",
+                "paramnames": []
+            }
+        },
+        "undocumented": true,
+        "name": "descuento",
+        "longname": "module:calculadora~descuento",
+        "kind": "member",
+        "scope": "inner",
+        "memberof": "module:calculadora"
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                3828,
+                3863
+            ],
+            "filename": "calculadora.js",
+            "lineno": 118,
+            "columnno": 6,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000187",
+                "name": "iva",
+                "type": "CallExpression",
+                "funcscope": "module:calculadora~main",
+                "value": "",
+                "paramnames": []
+            }
+        },
+        "undocumented": true,
+        "name": "iva",
+        "longname": "module:calculadora~iva",
+        "kind": "member",
+        "scope": "inner",
+        "memberof": "module:calculadora"
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                4027,
+                4077
+            ],
+            "filename": "calculadora.js",
+            "lineno": 128,
+            "columnno": 10,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000214",
+                "name": "conDescuento",
+                "type": "CallExpression",
+                "value": ""
+            }
+        },
+        "undocumented": true,
+        "name": "conDescuento",
+        "longname": "module:calculadora~main~conDescuento",
+        "kind": "constant",
+        "memberof": "module:calculadora~main",
+        "scope": "inner",
+        "params": []
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                4089,
+                4140
+            ],
+            "filename": "calculadora.js",
+            "lineno": 129,
+            "columnno": 10,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000221",
+                "name": "final",
+                "type": "CallExpression",
+                "value": ""
+            }
+        },
+        "undocumented": true,
+        "name": "final",
+        "longname": "module:calculadora~main~final",
+        "kind": "constant",
+        "memberof": "module:calculadora~main",
+        "scope": "inner",
+        "params": []
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                4453,
+                4555
+            ],
+            "filename": "calculadora.js",
+            "lineno": 140,
+            "columnno": 0,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000288",
+                "name": "module.exports",
+                "type": "ObjectExpression",
+                "value": "{\"IVA_GENERAL\":\"\",\"calcularPrecioConIva\":\"\",\"aplicarDescuento\":\"\",\"calcularPrecioFinal\":\"\"}",
+                "paramnames": []
+            }
+        },
+        "undocumented": true,
+        "name": "module:calculadora",
+        "longname": "module:calculadora",
+        "kind": "member"
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                4474,
+                4485
+            ],
+            "filename": "calculadora.js",
+            "lineno": 141,
+            "columnno": 2,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000293",
+                "name": "IVA_GENERAL",
+                "type": "Identifier",
+                "value": "IVA_GENERAL"
+            }
+        },
+        "undocumented": true,
+        "name": "IVA_GENERAL",
+        "longname": "module:calculadora.IVA_GENERAL",
+        "kind": "member",
+        "memberof": "module:calculadora",
+        "scope": "static"
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                4489,
+                4509
+            ],
+            "filename": "calculadora.js",
+            "lineno": 142,
+            "columnno": 2,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000295",
+                "name": "calcularPrecioConIva",
+                "type": "Identifier",
+                "value": "calcularPrecioConIva"
+            }
+        },
+        "undocumented": true,
+        "name": "calcularPrecioConIva",
+        "longname": "module:calculadora.calcularPrecioConIva",
+        "kind": "member",
+        "memberof": "module:calculadora",
+        "scope": "static"
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                4513,
+                4529
+            ],
+            "filename": "calculadora.js",
+            "lineno": 143,
+            "columnno": 2,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000297",
+                "name": "aplicarDescuento",
+                "type": "Identifier",
+                "value": "aplicarDescuento"
+            }
+        },
+        "undocumented": true,
+        "name": "aplicarDescuento",
+        "longname": "module:calculadora.aplicarDescuento",
+        "kind": "member",
+        "memberof": "module:calculadora",
+        "scope": "static"
+    },
+    {
+        "comment": "",
+        "meta": {
+            "range": [
+                4533,
+                4552
+            ],
+            "filename": "calculadora.js",
+            "lineno": 144,
+            "columnno": 2,
+            "path": "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript",
+            "code": {
+                "id": "astnode100000299",
+                "name": "calcularPrecioFinal",
+                "type": "Identifier",
+                "value": "calcularPrecioFinal"
+            }
+        },
+        "undocumented": true,
+        "name": "calcularPrecioFinal",
+        "longname": "module:calculadora.calcularPrecioFinal",
+        "kind": "member",
+        "memberof": "module:calculadora",
+        "scope": "static"
+    },
+    {
+        "kind": "package",
+        "longname": "package:undefined",
+        "files": [
+            "C:\\Users\\xelab\\Desktop\\DAW\\2ºDAW\\Despliegue\\TrabajoPlantillas-2\\calculadoraPrecios\\javascript\\calculadora.js"
+        ]
+    }
+]

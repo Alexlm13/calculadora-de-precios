@@ -6,5 +6,8 @@
   "scripts": {
     "docs": "jsdoc -c jsdoc.json"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "jsdoc": "^4.0.5"
+  }
 }
