@@ -1,0 +1,13 @@
+{
+  "name": "calculadora-precios",
+  "version": "1.0.0",
+  "description": "Calculadora de precios con IVA y descuento, documentada con JSDoc",
+  "main": "calculadora.js",
+  "scripts": {
+    "docs": "jsdoc -c jsdoc.json"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "jsdoc": "^4.0.5"
+  }
+}

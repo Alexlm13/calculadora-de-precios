@@ -1,0 +1,8 @@
+{
+  "source": {
+    "include": ["calculadora.js"]
+  },
+  "opts": {
+    "destination": "../docs/javascript/html"
+  }
+}
