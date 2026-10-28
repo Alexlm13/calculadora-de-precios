@@ -1,0 +1,81 @@
+name: Documentación automática
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  javascript:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: javascript/package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+        working-directory: javascript
+
+      - name: Generar documentación con JSDoc
+        run: npm run docs
+        working-directory: javascript
+
+      - name: Guardar documentación
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-javascript
+          path: docs/javascript/html/
+          if-no-files-found: error
+  publicar:
+    needs: [javascript]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Descargar documentación JavaScript
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-javascript
+          path: sitio/docs-javascript
+
+      - name: Crear página de inicio
+        run: |
+          cat > sitio/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="es">
+          <head>
+            <meta charset="utf-8">
+            <title>Calculadora de precios</title>
+          </head>
+          <body>
+            <h1>Calculadora de precios</h1>
+            <h2>Documentación</h2>
+            <ul>
+              <li><a href="docs-javascript/index.html">JavaScript (JSDoc)</a></li>
+            </ul>
+          </body>
+          </html>
+          EOF
+
+      - name: Preparar sitio para Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: sitio
+
+      - name: Publicar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
